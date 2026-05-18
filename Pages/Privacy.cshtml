@@ -1,8 +1,12 @@
-﻿@page
+﻿@page "/Confidentialite"
 @model PrivacyModel
 @{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Confidentialité";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<section class="panel narrow-panel">
+    <span class="eyebrow">Confidentialité</span>
+    <h1>Données locales</h1>
+    <p>SharpStartQuest stocke les quêtes dans une base SQLite locale pendant le développement.</p>
+    <p>Aucune authentification ni synchronisation externe n'est encore active dans cette version.</p>
+</section>

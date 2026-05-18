@@ -1,0 +1,17 @@
+@page "/Quetes/Supprimer/{id:int}"
+@model SharpStartQuest.Pages.Quests.DeleteModel
+@{
+    ViewData["Title"] = "Supprimer";
+}
+
+<section class="panel narrow-panel danger-panel">
+    <span class="eyebrow">Suppression</span>
+    <h1>Supprimer cette quête ?</h1>
+    <p><strong>@Model.Quest.Title</strong></p>
+    <p>Cette action retire la quête et son XP de ta progression.</p>
+
+    <form method="post" class="form-actions">
+        <button class="btn btn-danger" type="submit">Supprimer</button>
+        <a class="btn btn-outline-dark" asp-page="./Details" asp-route-id="@Model.Quest.Id">Annuler</a>
+    </form>
+</section>

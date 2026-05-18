@@ -1,0 +1,79 @@
+@page "/Quetes"
+@model SharpStartQuest.Pages.Quests.IndexModel
+@{
+    ViewData["Title"] = "Quêtes";
+}
+
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">Journal des quêtes</span>
+        <h1>Toutes les quêtes</h1>
+        <p>Priorise, termine, rouvre et garde une trace claire de ta progression.</p>
+    </div>
+    <a class="btn btn-primary" asp-page="./Create">Nouvelle quête</a>
+</section>
+
+<section class="summary-strip" aria-label="Résumé des quêtes">
+    <span>@Model.Stats.ActiveQuests actives</span>
+    <span>@Model.Stats.CompletedQuests terminées</span>
+    <span>@Model.Stats.TotalXp XP</span>
+    <span>Niveau @Model.Stats.Level</span>
+</section>
+
+<nav class="filter-tabs" aria-label="Filtrer les quêtes">
+    <a class="@(Model.Filtre == "toutes" ? "active" : null)" asp-page="./Index" asp-route-filtre="toutes">Toutes</a>
+    <a class="@(Model.Filtre == "actives" ? "active" : null)" asp-page="./Index" asp-route-filtre="actives">Actives</a>
+    <a class="@(Model.Filtre == "terminees" ? "active" : null)" asp-page="./Index" asp-route-filtre="terminees">Terminées</a>
+</nav>
+
+@if (Model.Quests.Count == 0)
+{
+    <section class="panel">
+        <div class="empty-state">
+            <strong>Aucune quête dans ce filtre.</strong>
+            <p>Change de filtre ou crée une nouvelle quête pour commencer.</p>
+            <a class="btn btn-primary" asp-page="./Create">Créer une quête</a>
+        </div>
+    </section>
+}
+else
+{
+    <section class="quest-table panel">
+        <div class="quest-table-header">
+            <span>Quête</span>
+            <span>XP</span>
+            <span>État</span>
+            <span>Actions</span>
+        </div>
+        @foreach (var quest in Model.Quests)
+        {
+            <article class="quest-table-row">
+                <div>
+                    <h2>@quest.Title</h2>
+                    <p>@quest.Description</p>
+                    <small>Difficulté @quest.Difficulty/5</small>
+                </div>
+                <strong>@quest.XpReward</strong>
+                <span class="status-pill @(quest.IsCompleted ? "done" : "active")">
+                    @(quest.IsCompleted ? "Terminée" : "Active")
+                </span>
+                <div class="row-actions">
+                    <a class="btn btn-outline-dark btn-sm" asp-page="./Details" asp-route-id="@quest.Id">Voir</a>
+                    <a class="btn btn-outline-dark btn-sm" asp-page="./Edit" asp-route-id="@quest.Id">Éditer</a>
+                    @if (quest.IsCompleted)
+                    {
+                        <form method="post" asp-page-handler="Reopen" asp-route-id="@quest.Id" asp-route-filtre="@Model.Filtre">
+                            <button class="btn btn-outline-dark btn-sm" type="submit">Rouvrir</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" asp-page-handler="Complete" asp-route-id="@quest.Id" asp-route-filtre="@Model.Filtre">
+                            <button class="btn btn-success btn-sm" type="submit">Terminer</button>
+                        </form>
+                    }
+                </div>
+            </article>
+        }
+    </section>
+}

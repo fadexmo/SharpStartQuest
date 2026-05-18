@@ -1,0 +1,59 @@
+@page "/Quetes/Editer/{id:int}"
+@model SharpStartQuest.Pages.Quests.EditModel
+@{
+    ViewData["Title"] = "Éditer";
+}
+
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">Édition</span>
+        <h1>Éditer la quête</h1>
+        <p>Ajuste le périmètre avant de repartir au combat.</p>
+    </div>
+</section>
+
+<section class="panel form-panel">
+    <form method="post">
+        <input asp-for="Quest.Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Quest.Title" class="form-label">Titre</label>
+            <input asp-for="Quest.Title" class="form-control" />
+            <span asp-validation-for="Quest.Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Quest.Description" class="form-label">Description</label>
+            <textarea asp-for="Quest.Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Quest.Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-grid">
+            <div class="mb-3">
+                <label asp-for="Quest.XpReward" class="form-label">XP</label>
+                <input asp-for="Quest.XpReward" class="form-control" />
+                <span asp-validation-for="Quest.XpReward" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Quest.Difficulty" class="form-label">Difficulté</label>
+                <input asp-for="Quest.Difficulty" class="form-control" />
+                <span asp-validation-for="Quest.Difficulty" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-check mb-4">
+            <input asp-for="Quest.IsCompleted" class="form-check-input" />
+            <label asp-for="Quest.IsCompleted" class="form-check-label">Quête terminée</label>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Sauvegarder</button>
+            <a class="btn btn-outline-dark" asp-page="./Details" asp-route-id="@Model.Quest.Id">Annuler</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

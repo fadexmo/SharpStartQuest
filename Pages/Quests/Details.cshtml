@@ -1,0 +1,56 @@
+@page "/Quetes/Detail/{id:int}"
+@model SharpStartQuest.Pages.Quests.DetailsModel
+@{
+    ViewData["Title"] = Model.Quest.Title;
+}
+
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">Détail</span>
+        <h1>@Model.Quest.Title</h1>
+        <p>@Model.Quest.Description</p>
+    </div>
+    <div class="hero-actions">
+        <a class="btn btn-outline-dark" asp-page="./Edit" asp-route-id="@Model.Quest.Id">Éditer</a>
+        <a class="btn btn-outline-danger" asp-page="./Delete" asp-route-id="@Model.Quest.Id">Supprimer</a>
+    </div>
+</section>
+
+<section class="details-grid">
+    <article class="stat-card">
+        <span class="stat-label">Récompense</span>
+        <strong>@Model.Quest.XpReward XP</strong>
+        <small>Difficulté @Model.Quest.Difficulty/5</small>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">État</span>
+        <strong>@(Model.Quest.IsCompleted ? "Terminée" : "Active")</strong>
+        <small>@(Model.Quest.CompletedAt?.ToLocalTime().ToString("g") ?? "Pas encore terminée")</small>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Création</span>
+        <strong>@Model.Quest.CreatedAt.ToLocalTime().ToString("dd/MM")</strong>
+        <small>@Model.Quest.CreatedAt.ToLocalTime().ToString("g")</small>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <div>
+            <span class="eyebrow">Action</span>
+            <h2>Changer l'état</h2>
+        </div>
+    </div>
+    @if (Model.Quest.IsCompleted)
+    {
+        <form method="post" asp-page-handler="Reopen" asp-route-id="@Model.Quest.Id">
+            <button class="btn btn-outline-dark" type="submit">Rouvrir la quête</button>
+        </form>
+    }
+    else
+    {
+        <form method="post" asp-page-handler="Complete" asp-route-id="@Model.Quest.Id">
+            <button class="btn btn-success" type="submit">Terminer et gagner @Model.Quest.XpReward XP</button>
+        </form>
+    }
+</section>

@@ -1,10 +1,126 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Tableau de bord";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="dashboard-band">
+    <div>
+        <div class="eyebrow">SharpStartQuest</div>
+        <h1>Tableau de bord SSQ</h1>
+        <p>Transforme tes objectifs de développement en quêtes, récupère l'XP et monte de niveau.</p>
+    </div>
+    <div class="hero-actions">
+        <a class="btn btn-primary" asp-page="/Quests/Create">Nouvelle quête</a>
+        <a class="btn btn-outline-dark" asp-page="/Quests/Index">Voir les quêtes</a>
+    </div>
+</section>
+
+<section class="stats-grid" aria-label="Progression">
+    <article class="stat-card stat-card-main">
+        <span class="stat-label">Niveau</span>
+        <strong>@Model.Stats.Level</strong>
+        <div class="xp-track" aria-label="Progression vers le prochain niveau">
+            <span style="width: @Model.Stats.ProgressPercent%"></span>
+        </div>
+        <small>@Model.Stats.XpIntoLevel / @Model.Stats.XpForNextLevel XP avant le prochain niveau</small>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">XP total</span>
+        <strong>@Model.Stats.TotalXp</strong>
+        <small>gagné sur les quêtes terminées</small>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Actives</span>
+        <strong>@Model.Stats.ActiveQuests</strong>
+        <small>@Model.Stats.CompletedQuests terminées</small>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Achèvement</span>
+        <strong>@Model.Stats.CompletionRate%</strong>
+        <small>@Model.Stats.TotalQuests quêtes au total</small>
+    </article>
+</section>
+
+<section class="dashboard-grid">
+    <div class="panel">
+        <div class="panel-header">
+            <div>
+                <span class="eyebrow">Priorités</span>
+                <h2>Quêtes prioritaires</h2>
+            </div>
+            <a asp-page="/Quests/Create">Ajouter</a>
+        </div>
+
+        @if (Model.ActiveQuests.Count == 0)
+        {
+            <div class="empty-state">
+                <strong>Aucune quête active.</strong>
+                <p>Crée une quête et donne une direction claire à ta prochaine session.</p>
+            </div>
+        }
+        else
+        {
+            <div class="quest-list">
+                @foreach (var quest in Model.ActiveQuests)
+                {
+                    <article class="quest-row">
+                        <div>
+                            <h3>@quest.Title</h3>
+                            <p>@quest.Description</p>
+                            <div class="quest-meta">
+                                <span>@quest.XpReward XP</span>
+                                <span>Difficulté @quest.Difficulty/5</span>
+                            </div>
+                        </div>
+                        <form method="post" asp-page-handler="Complete" asp-route-id="@quest.Id">
+                            <button class="btn btn-success btn-sm" type="submit">Terminer</button>
+                        </form>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+
+    <aside class="panel">
+        <div class="panel-header">
+            <div>
+                <span class="eyebrow">Badges</span>
+                <h2>Progression ludique</h2>
+            </div>
+        </div>
+        @if (Model.Stats.Badges.Count == 0)
+        {
+            <div class="empty-state compact">
+                <strong>Aucun badge.</strong>
+                <p>Termine une quête pour débloquer le premier.</p>
+            </div>
+        }
+        else
+        {
+            <div class="badge-list">
+                @foreach (var badge in Model.Stats.Badges)
+                {
+                    <span>@badge</span>
+                }
+            </div>
+        }
+
+        <div class="recent-block">
+            <h3>Dernières victoires</h3>
+            @if (Model.RecentlyCompleted.Count == 0)
+            {
+                <p class="muted">Rien terminé pour l'instant.</p>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var quest in Model.RecentlyCompleted)
+                    {
+                        <li>@quest.Title <span>@quest.XpReward XP</span></li>
+                    }
+                </ul>
+            }
+        </div>
+    </aside>
+</section>
