@@ -41,6 +41,7 @@ public class EditModel(AppDbContext db) : PageModel
         quest.Description = Quest.Description;
         quest.XpReward = Quest.XpReward;
         quest.Difficulty = Quest.Difficulty;
+        quest.Category = Quest.Category;
 
         if (Quest.IsCompleted && !quest.IsCompleted)
         {

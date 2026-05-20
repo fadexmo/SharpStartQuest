@@ -19,5 +19,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<Quest>()
             .HasIndex(quest => quest.IsCompleted);
+
+        modelBuilder.Entity<Quest>()
+            .HasIndex(quest => quest.Category);
     }
 }

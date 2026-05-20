@@ -29,6 +29,16 @@
             <span asp-validation-for="Quest.Description" class="text-danger"></span>
         </div>
 
+        <div class="mb-3">
+            <label asp-for="Quest.Category" class="form-label">Catégorie</label>
+            <select asp-for="Quest.Category" class="form-select">
+                @foreach (var cat in Enum.GetValues<QuestCategory>())
+                {
+                    <option value="@cat">@cat</option>
+                }
+            </select>
+        </div>
+
         <div class="form-grid">
             <div class="mb-3">
                 <label asp-for="Quest.XpReward" class="form-label">XP</label>

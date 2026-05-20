@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SharpStartQuest.Models;
 
+public enum QuestCategory { Backend, Frontend, DevOps, Algo, Autre }
+
 public class Quest
 {
     public int Id { get; set; }
@@ -18,6 +20,8 @@ public class Quest
 
     [Range(1, 5)]
     public int Difficulty { get; set; } = 1;
+
+    public QuestCategory Category { get; set; } = QuestCategory.Autre;
 
     public bool IsCompleted { get; set; }
 

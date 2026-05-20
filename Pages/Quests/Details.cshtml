@@ -23,6 +23,10 @@
         <small>Difficulté @Model.Quest.Difficulty/5</small>
     </article>
     <article class="stat-card">
+        <span class="stat-label">Catégorie</span>
+        <strong>@Model.Quest.Category</strong>
+    </article>
+    <article class="stat-card">
         <span class="stat-label">État</span>
         <strong>@(Model.Quest.IsCompleted ? "Terminée" : "Active")</strong>
         <small>@(Model.Quest.CompletedAt?.ToLocalTime().ToString("g") ?? "Pas encore terminée")</small>

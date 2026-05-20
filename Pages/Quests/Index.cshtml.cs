@@ -16,6 +16,9 @@ public class IndexModel(AppDbContext db, QuestProgressService progressService) :
     [BindProperty(SupportsGet = true)]
     public string Filtre { get; set; } = "toutes";
 
+    [BindProperty(SupportsGet = true)]
+    public string Categorie { get; set; } = "";
+
     public async Task OnGetAsync()
     {
         var allQuests = await db.Quests
@@ -32,6 +35,11 @@ public class IndexModel(AppDbContext db, QuestProgressService progressService) :
             "terminees" => allQuests.Where(quest => quest.IsCompleted).ToList(),
             _ => allQuests
         };
+
+        if (Enum.TryParse<QuestCategory>(Categorie, out var cat))
+        {
+            Quests = Quests.Where(quest => quest.Category == cat).ToList();
+        }
     }
 
     public async Task<IActionResult> OnPostCompleteAsync(int id)
@@ -44,7 +52,7 @@ public class IndexModel(AppDbContext db, QuestProgressService progressService) :
             await db.SaveChangesAsync();
         }
 
-        return RedirectToPage(new { Filtre });
+        return RedirectToPage(new { Filtre, Categorie });
     }
 
     public async Task<IActionResult> OnPostReopenAsync(int id)
@@ -57,6 +65,6 @@ public class IndexModel(AppDbContext db, QuestProgressService progressService) :
             await db.SaveChangesAsync();
         }
 
-        return RedirectToPage(new { Filtre });
+        return RedirectToPage(new { Filtre, Categorie });
     }
 }
